@@ -8,7 +8,6 @@
       "email": "engineering@cargochief.com"
     }
   },
-  "host": "",
   "basePath": "/v1",
   "schemes": [
     "http"
@@ -220,8 +219,7 @@
         "carriers": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/Carrier",
-            "collectionFormat": "csv"
+            "$ref": "#/definitions/Carrier"
           }
         }
       }
