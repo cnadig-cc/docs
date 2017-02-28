@@ -1,0 +1,310 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "APIs for Capacity Database",
+    "version": "1.0.0",
+    "title": "Capacity Database",
+    "contact": {
+      "email": "engineering@cargochief.com"
+    }
+  },
+  "host": "",
+  "basePath": "/v1",
+  "schemes": [
+    "http"
+  ],
+  "tags": [
+    {
+      "name": "capacity",
+      "description": "Truck Capacity based APIs"
+    }
+  ],
+  "paths": {
+    "/quote": {
+      "post": {
+        "tags": [
+          "capacity"
+        ],
+        "summary": "Get the rate for a quote",
+        "description": "",
+        "operationId": "getQuote",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "lane",
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Lane"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "retrieved quote",
+            "schema": {
+              "$ref": "#/definitions/Quote"
+            }
+          }
+        }
+      }
+    },
+    "/carrierSearch": {
+      "post": {
+        "tags": [
+          "capacity"
+        ],
+        "summary": "Get Carriers for a lane",
+        "description": "",
+        "operationId": "searchCarriers",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "lane",
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Lane"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "carrier list",
+            "schema": {
+              "$ref": "#/definitions/CarrierList"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Quote": {
+      "properties": {
+        "lane": {
+          "$ref": "#/definitions/Lane"
+        },
+        "ratePerMile": {
+          "type": "number",
+          "format": "double",
+          "example": 15.1
+        },
+        "totalPrice": {
+          "type": "number",
+          "format": "double",
+          "example": 1270.0
+        },
+        "totalMiles": {
+          "type": "number",
+          "format": "double",
+          "example": 100.0
+        },
+        "availableTrucks": {
+          "type": "integer",
+          "format": "int64",
+          "example": 10
+        },
+        "priceGuaranteedTill": {
+          "type": "string",
+          "format": "date",
+          "example": "2017/02/28"
+        },
+        "laneConfidence": {
+          "type": "number",
+          "format": "double",
+          "example": 85.0
+        }
+      }
+    },
+    "Carrier": {
+      "properties": {
+        "businessName": {
+          "type": "string",
+          "example": "Cargo Chief Carriers"
+        },
+        "firmMc": {
+          "type": "string",
+          "example": "775132"
+        },
+        "firmDot": {
+          "type": "string",
+          "example": "193801"
+        },
+        "noOfTrucks": {
+          "type": "integer",
+          "format": "int32",
+          "example": 10
+        },
+        "yearsOfService": {
+          "type": "integer",
+          "format": "int32",
+          "example": 1
+        },
+        "loadsToDate": {
+          "type": "integer",
+          "format": "int32",
+          "example": 50
+        },
+        "contactEmail": {
+          "type": "string",
+          "format": "email",
+          "example": "operations@cargochief.com"
+        },
+        "contactPhone": {
+          "type": "string",
+          "example": "1231231231"
+        },
+        "qualifiers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Qualifier"
+          }
+        }
+      }
+    },
+    "Qualifier": {
+      "properties": {
+        "type": {
+          "type": "string",
+          "example": "BETTER_SERVICE"
+        },
+        "description": {
+          "type": "string",
+          "example": "Better Service"
+        },
+        "value": {
+          "type": "number",
+          "format": "double",
+          "example": 4.5
+        }
+      }
+    },
+    "CarrierList": {
+      "properties": {
+        "lane": {
+          "$ref": "#/definitions/Lane"
+        },
+        "ratePerMile": {
+          "type": "number",
+          "format": "double",
+          "example": 15.1
+        },
+        "totalPrice": {
+          "type": "number",
+          "format": "double",
+          "example": 1270.0
+        },
+        "totalMiles": {
+          "type": "number",
+          "format": "double",
+          "example": 100.0
+        },
+        "availableTrucks": {
+          "type": "integer",
+          "format": "int64",
+          "example": 10
+        },
+        "carriers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Carrier",
+            "collectionFormat": "csv"
+          }
+        }
+      }
+    },
+    "Lane": {
+      "properties": {
+        "origin": {
+          "$ref": "#/definitions/Address"
+        },
+        "destination": {
+          "$ref": "#/definitions/Address"
+        },
+        "pickupDate": {
+          "type": "string",
+          "format": "date",
+          "example": "2017/02/27"
+        },
+        "deliveryDate": {
+          "type": "string",
+          "format": "date",
+          "example": "2017/03/02"
+        },
+        "trailerType": {
+          "type": "string",
+          "enum": [
+            "VAN",
+            "REEFER",
+            "FLATBED"
+          ]
+        },
+        "product": {
+          "type": "string",
+          "example": "Apples"
+        },
+        "insurance": {
+          "type": "number",
+          "format": "double",
+          "example": 1735.50
+        },
+        "specialInstructions": {
+          "type": "string"
+        },
+        "carrierPreference": {
+          "type": "string"
+        }
+      }
+    },
+    "Address": {
+      "properties": {
+        "address1": {
+          "type": "string",
+          "example": "1060 La Avenida Street"
+        },
+        "address2": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string",
+          "example": "Mountain View"
+        },
+        "state": {
+          "type": "string",
+          "example": "CA"
+        },
+        "zip": {
+          "type": "string",
+          "example": "94043"
+        },
+        "country": {
+          "type": "string",
+          "example": "US"
+        },
+        "latitude": {
+          "type": "number",
+          "format": "double",
+          "example": 37.413691
+        },
+        "longitude": {
+          "type": "number",
+          "format": "double",
+          "example": -122.071206
+        }
+      }
+    }
+  }
+}
