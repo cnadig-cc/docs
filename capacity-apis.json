@@ -54,7 +54,7 @@
         }
       }
     },
-    "/carrierSearch": {
+    "/searchCarrier": {
       "post": {
         "tags": [
           "capacity"
@@ -88,9 +88,285 @@
           }
         }
       }
+    },
+    "/searchTruck": {
+      "post": {
+        "tags": [
+          "capacity"
+        ],
+        "summary": "Get trucks for a given lane",
+        "description": "",
+        "operationId": "searchTrucks",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "lane",
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Lane"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "trucks list",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Truck"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/registerLoad": {
+      "post": {
+        "tags": [
+          "capacity"
+        ],
+        "summary": "Register load to be maintained by Cargo Chief",
+        "description": "",
+        "operationId": "registerLoad",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "load",
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Load"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "registered load successfully",
+            "schema": {
+              "$ref": "#/definitions/LoadReference"
+            }
+          }
+        }
+      }
+    },
+    "/getBids": {
+      "post": {
+        "tags": [
+          "capacity"
+        ],
+        "summary": "Get bids for a registered load",
+        "description": "",
+        "operationId": "getBids",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "loadReferenceNumber",
+            "description": "",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Bid"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/trackLoad": {
+      "post": {
+        "tags": [
+          "capacity"
+        ],
+        "summary": "Track a load through it's different states",
+        "description": "",
+        "operationId": "trackLoad",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "loadReferenceNumber",
+            "description": "",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/LoadTrackingInfo"
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
+    "LoadTrackingInfo": {
+      "properties": {
+        "loadReferenceNumber": {
+          "type": "string",
+          "example": "111LL"
+        },
+        "currentLocation": {
+          "$ref": "#/definitions/Address"
+        },
+        "historicalLocations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Address"
+          }
+        },
+        "eta": {
+          "type": "number",
+          "format": "int64",
+          "example": 1440
+        },
+        "currentStatus": {
+          "type": "string",
+          "enum": [
+            "IN_TRANSIT"
+          ]
+        },
+        "statusHistory": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/LoadStatus"
+          }
+        }
+      }
+    },
+    "LoadStatus": {
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "CONFIRMED"
+          ]
+        },
+        "time": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2017-02-26 T 14:45"
+        }
+      }
+    },
+    "Bid": {
+      "properties": {
+        "bidReferenceNumber": {
+          "type": "string",
+          "example": "123"
+        },
+        "estimatedDaysToDeliver": {
+          "type": "number",
+          "format": "int32",
+          "example": 3
+        },
+        "cost": {
+          "type": "number",
+          "format": "double",
+          "example": 59.90
+        },
+        "carrier": {
+          "schema": {
+            "$ref": "#/definitions/Carrier"
+          }
+        }
+      }
+    },
+    "LoadReference": {
+      "properties": {
+        "referenceNumber": {
+          "type": "string",
+          "example": "1123LL"
+        }
+      }
+    },
+    "Customer": {
+      "properties": {
+        "businessName": {
+          "type": "string",
+          "example": "ABC Apples"
+        },
+        "address": {
+          "schema": {
+            "$ref": "#/definitions/Address"
+          }
+        },
+        "contact": {
+          "schema": {
+            "$ref": "#/definitions/Contact"
+          }
+        }
+      }
+    },
+    "Load": {
+      "properties": {
+        "lane": {
+          "$ref": "#/definitions/Lane"
+        },
+        "loadStops": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/LoadStop"
+          }
+        },
+        "carrier": {
+          "$ref": "#/definitions/Carrier"
+        },
+        "customer": {
+          "$ref": "#/definitions/Customer"
+        },
+        "lineItems": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/LineItem"
+          }
+        },
+        "trackingNeeded": {
+          "type": "boolean",
+          "example": true
+        },
+        "bookingNeeded": {
+          "type": "boolean",
+          "example": true
+        }
+      }
+    },
+    "LineItem": {
+      "properties": {
+        "price": {
+          "type": "number",
+          "format": "double",
+          "example": 50.75
+        },
+        "cost": {
+          "type": "number",
+          "format": "double",
+          "example": 45.00
+        },
+        "chargeType": {
+          "$ref": "#/definitions/ChargeType"
+        }
+      }
+    },
     "Quote": {
       "properties": {
         "lane": {
@@ -119,7 +395,7 @@
         "priceGuaranteedTill": {
           "type": "string",
           "format": "date",
-          "example": "2017/02/28"
+          "example": "2017-02-28"
         },
         "laneConfidence": {
           "type": "number",
@@ -157,20 +433,35 @@
           "format": "int32",
           "example": 50
         },
-        "contactEmail": {
-          "type": "string",
-          "format": "email",
-          "example": "operations@cargochief.com"
-        },
-        "contactPhone": {
-          "type": "string",
-          "example": "1231231231"
+        "contact": {
+          "schema": {
+            "$ref": "#/definitions/Contact"
+          }
         },
         "qualifiers": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/Qualifier"
           }
+        }
+      }
+    },
+    "ChargeType": {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "LINE_HAUL",
+            "ACCESSORIALS",
+            "ADDITIONAL_PALLETS",
+            "AFTER_HOUR_DELIVERIES",
+            "LAYOVERS",
+            "DENTENTION_AT_LOADING"
+          ]
+        },
+        "description": {
+          "type": "string",
+          "example": "Line Haul"
         }
       }
     },
@@ -224,6 +515,23 @@
         }
       }
     },
+    "Truck": {
+      "properties": {
+        "carrier": {
+          "$ref": "#/definitions/Carrier"
+        },
+        "availableTrucks": {
+          "type": "integer",
+          "format": "int64",
+          "example": 2
+        },
+        "availabilityConfidence": {
+          "type": "number",
+          "format": "double",
+          "example": 85.0
+        }
+      }
+    },
     "Lane": {
       "properties": {
         "origin": {
@@ -235,12 +543,12 @@
         "pickupDate": {
           "type": "string",
           "format": "date",
-          "example": "2017/02/27"
+          "example": "2017-02-27"
         },
         "deliveryDate": {
           "type": "string",
           "format": "date",
-          "example": "2017/03/02"
+          "example": "2017-03-02"
         },
         "trailerType": {
           "type": "string",
@@ -264,6 +572,40 @@
         },
         "carrierPreference": {
           "type": "string"
+        }
+      }
+    },
+    "LoadStop": {
+      "properties": {
+        "address": {
+          "schema": {
+            "$ref": "#/definitions/Address"
+          }
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "PICKUP",
+            "DELIVERY"
+          ]
+        },
+        "referenceNumber": {
+          "type": "string",
+          "example": "123LH"
+        },
+        "scheduledTime": {
+          "type": "string",
+          "format": "date",
+          "example": "2017-03-03"
+        },
+        "sequence": {
+          "type": "number",
+          "format": "int32",
+          "example": "2"
+        },
+        "specialInstructions": {
+          "type": "string",
+          "example": "Pick this up too"
         }
       }
     },
@@ -301,6 +643,26 @@
           "type": "number",
           "format": "double",
           "example": -122.071206
+        }
+      }
+    },
+    "Contact": {
+      "properties": {
+        "firstName": {
+          "type": "string",
+          "example": "John"
+        },
+        "lastName": {
+          "type": "string",
+          "example": "Smith"
+        },
+        "primaryPhone": {
+          "type": "string",
+          "example": "2342342342"
+        },
+        "primaryEmail": {
+          "type": "string",
+          "example": "john.smith@email.com"
         }
       }
     }
