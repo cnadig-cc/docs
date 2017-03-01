@@ -216,9 +216,130 @@
           }
         }
       }
+    },
+    "/bookLoad": {
+      "post": {
+        "tags": [
+          "capacity"
+        ],
+        "summary": "To book a load",
+        "description": "",
+        "operationId": "bookLoad",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "loadDetails",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BookLoadRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/LoadConfirmation"
+            }
+          }
+        }
+      }
+    },
+    "/getLoadDocuments": {
+      "post": {
+        "tags": [
+          "capacity"
+        ],
+        "summary": "Retrieve all load documents",
+        "description": "",
+        "operationId": "getLoadDocuments",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "referenceNumber",
+            "type": "string",
+            "required": true,
+            "description": ""
+          },
+          {
+            "in": "body",
+            "name": "documentType",
+            "type": "string",
+            "required": true,
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Document"
+              }
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
+    "Document": {
+      "properties": {
+        "referenceNumber": {
+          "type": "string",
+          "example": "123LB"
+        },
+        "documentType": {
+          "type": "string",
+          "enum": [
+            "POD",
+            "BOL",
+            "INVOICE"
+          ]
+        },
+        "url": {
+          "type": "string",
+          "example": "http://ur1.com"
+        }
+      }
+    },
+    "LoadConfirmation": {
+      "properties": {
+        "confirmationNumber": {
+          "type": "string",
+          "example": "123L"
+        }
+      }
+    },
+    "BookLoadRequest": {
+      "properties": {
+        "referenceNumber": {
+          "type": "string",
+          "example": "1123HA"
+        },
+        "selectedCarrier": {
+          "type": "string",
+          "example": "Cargo Carriers"
+        },
+        "agreedAmount": {
+          "type": "number",
+          "format": "double",
+          "example": 1200.40
+        },
+        "contractDocuments": {
+          "type": "array",
+          "items": {
+            "type": "file"
+          }
+        }
+      }
+    },
     "LoadTrackingInfo": {
       "properties": {
         "loadReferenceNumber": {
