@@ -173,8 +173,7 @@
             "name": "loadReferenceNumber",
             "description": "Load reference Number",
             "required": true,
-            "type": "string",
-            "example": "123LO"
+            "type": "string"
           }
         ],
         "responses": {
