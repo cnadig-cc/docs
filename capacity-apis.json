@@ -339,7 +339,7 @@
         "contractDocuments": {
           "type": "array",
           "items": {
-            "type": "file"
+            "type": "string"
           }
         }
       }
