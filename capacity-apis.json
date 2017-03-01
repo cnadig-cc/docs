@@ -171,9 +171,10 @@
           {
             "in": "body",
             "name": "loadReferenceNumber",
-            "description": "",
+            "description": "Load reference Number",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "example": "123LO"
           }
         ],
         "responses": {
@@ -429,14 +430,10 @@
           "example": "ABC Apples"
         },
         "address": {
-          "schema": {
-            "$ref": "#/definitions/Address"
-          }
+          "$ref": "#/definitions/Address"
         },
         "contact": {
-          "schema": {
-            "$ref": "#/definitions/Contact"
-          }
+          "$ref": "#/definitions/Contact"
         }
       }
     },
@@ -557,9 +554,7 @@
           "example": 50
         },
         "contact": {
-          "schema": {
-            "$ref": "#/definitions/Contact"
-          }
+          "$ref": "#/definitions/Contact"
         },
         "qualifiers": {
           "type": "array",
@@ -701,9 +696,7 @@
     "LoadStop": {
       "properties": {
         "address": {
-          "schema": {
-            "$ref": "#/definitions/Address"
-          }
+          "$ref": "#/definitions/Address"
         },
         "type": {
           "type": "string",
