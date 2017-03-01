@@ -178,6 +178,7 @@
         ],
         "responses": {
           "200": {
+            "description": "bids placed by carriers",
             "schema": {
               "type": "array",
               "items": {
@@ -210,6 +211,7 @@
         ],
         "responses": {
           "200": {
+            "description": "load tracking info",
             "schema": {
               "$ref": "#/definitions/LoadTrackingInfo"
             }
@@ -241,6 +243,7 @@
         ],
         "responses": {
           "200": {
+            "description": "load confirmation number after booking it",
             "schema": {
               "$ref": "#/definitions/LoadConfirmation"
             }
@@ -277,6 +280,7 @@
         ],
         "responses": {
           "200": {
+            "description": "all uploaded load documents",
             "schema": {
               "type": "array",
               "items": {
@@ -406,9 +410,7 @@
           "example": 59.90
         },
         "carrier": {
-          "schema": {
-            "$ref": "#/definitions/Carrier"
-          }
+          "$ref": "#/definitions/Carrier"
         }
       }
     },
