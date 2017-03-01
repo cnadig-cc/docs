@@ -164,6 +164,9 @@
         "summary": "Get bids for a registered load",
         "description": "",
         "operationId": "getBids",
+        "produces": [
+          "application/json"
+        ],
         "consumes": [
           "application/json"
         ],
